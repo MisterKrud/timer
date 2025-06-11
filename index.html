@@ -15,18 +15,27 @@
 
   <div>Timer: <span id="timer">03:00</span></div>
 
-  <script>
-    let startTime = Date.now();
+ <script>
+  const countdownSeconds = 300; // Change this value to set the start time
+  let endTime = Date.now() + countdownSeconds * 1000;
 
-    function updateTimer() {
-      const now = Date.now();
-      const elapsed = Math.floor((now - startTime) / 1000); // seconds
-      const minutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
-      const seconds = String(elapsed % 60).padStart(2, '0');
-      document.getElementById("timer").textContent = `${minutes}:${seconds}`;
+  function updateTimer() {
+    const now = Date.now();
+    const remaining = Math.max(0, Math.floor((endTime - now) / 1000));
+
+    const minutes = String(Math.floor(remaining / 60)).padStart(2, '0');
+    const seconds = String(remaining % 60).padStart(2, '0');
+    document.getElementById("timer").textContent = `${minutes}:${seconds}`;
+
+    if (remaining === 0) {
+      clearInterval(timerInterval);
+      // Optional: do something when time's up
+      document.getElementById("timer").textContent = "Time's up!";
     }
+  }
 
-    setInterval(updateTimer, 1000);
-  </script>
+  const timerInterval = setInterval(updateTimer, 1000);
+  updateTimer(); // Run immediately to avoid 1s delay
+</script>
 </body>
 </html>
